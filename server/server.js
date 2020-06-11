@@ -3,9 +3,11 @@ require('./config/config');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
+const path = require('path');
 const app = express();
 
+//DIRECTORIO PUBLICO PARA ACCEDER A RECURSOS
+app.use(express.static(path.resolve(__dirname,'../public')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
