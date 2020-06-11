@@ -9,7 +9,9 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(require('./routes/usuario'));
+
+//configuración de rutas
+app.use(require('./routes/index'));
 
 
 /*let conexion = async ()=>{

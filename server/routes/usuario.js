@@ -3,13 +3,14 @@ const app = express();
 const bcrypt = require('bcrypt');
 const _ = require('underscore'); //libreria para funciones de JS como filtar campos de objetos
 const Usuario = require('../models/usuario');
+const {verificaToken, verificaAdminRol} = require('../middlewares/autenticacion')
 
 app.get('/', (req, res)=>{
     //res.send('Hola');
     res.json('Hola');
 });
 
-app.get('/usuario', (req, res)=>{
+app.get('/usuario', verificaToken, (req, res)=>{
     let desde = Number(req.query.desde) || 0;
     let limite = Number(req.query.limite) || 5;
 
@@ -34,7 +35,7 @@ app.get('/usuario', (req, res)=>{
     });
 });
 
-app.post('/usuario', (req, res)=>{
+app.post('/usuario', [verificaToken, verificaAdminRol], (req, res)=>{
     let body = req.body;
 
     let usuario = new Usuario({
@@ -61,7 +62,7 @@ app.post('/usuario', (req, res)=>{
 });
 
 
-app.put('/usuario/:id', (req, res)=>{
+app.put('/usuario/:id', [verificaToken, verificaAdminRol], (req, res)=>{
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
@@ -81,7 +82,7 @@ app.put('/usuario/:id', (req, res)=>{
 
 });
 
-app.delete('/usuario/:id', (req, res)=>{
+app.delete('/usuario/:id', verificaToken, (req, res)=>{
         let id = req.params.id;
         //let body = _.pick(req.body, ['estado']);
         //Usuario.findByIdAndRemove(id, (err,usuarioDB)=>{
